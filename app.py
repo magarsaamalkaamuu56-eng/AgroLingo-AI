@@ -45,7 +45,7 @@ def chat():
     try:
         client = genai.Client(api_key=api_key)
         response = client.models.generate_content(
-            model=os.environ.get("gemini-2.5-flash-lite"),
+            model=os.environ.get("GEMINI_MODEL", "gemini-2.5-flash-lite"),
             contents=message,
             config=types.GenerateContentConfig(
                 system_instruction=SYSTEM_INSTRUCTION,
