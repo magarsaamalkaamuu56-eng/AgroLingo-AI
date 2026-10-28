@@ -1,293 +1,274 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#166534">
-    <title>AgroLingo AI | Smart Farming Assistant</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f0fdf4;
-            color: #183324;
-        }
-
-        header {
-            background: #166534;
-            color: white;
-            padding: 22px 15px;
-            text-align: center;
-        }
-
-        header h1 {
-            margin: 0 0 8px;
-            font-size: 27px;
-        }
-
-        header p {
-            margin: 0;
-            font-size: 14px;
-        }
-
-        main {
-            max-width: 760px;
-            margin: 22px auto;
-            padding: 0 12px;
-        }
-
-        .card {
-            background: white;
-            padding: 18px;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px #00000010;
-        }
-
-        .notice {
-            background: #dcfce7;
-            border-left: 4px solid #16a34a;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
-
-        #chat {
-            min-height: 280px;
-            max-height: 55vh;
-            overflow-y: auto;
-            padding: 8px 0;
-        }
-
-        .message {
-            padding: 12px 14px;
-            margin: 12px 0;
-            border-radius: 12px;
-            white-space: pre-wrap;
-            overflow-wrap: anywhere;
-            line-height: 1.55;
-        }
-
-        .user {
-            background: #dcfce7;
-            margin-left: 30px;
-        }
-
-        .ai {
-            background: #f3f4f6;
-            margin-right: 15px;
-        }
-
-        .label {
-            display: block;
-            font-size: 12px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .suggestions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin: 15px 0;
-        }
-
-        .suggestions button {
-            background: #ecfdf5;
-            color: #166534;
-            border: 1px solid #86efac;
-            border-radius: 20px;
-            padding: 9px 12px;
-            cursor: pointer;
-        }
-
-        form {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        textarea {
-            flex: 1;
-            min-width: 0;
-            resize: vertical;
-            min-height: 48px;
-            max-height: 150px;
-            padding: 13px;
-            border: 1px solid #bbf7d0;
-            border-radius: 10px;
-            font: inherit;
-        }
-
-        #send {
-            border: none;
-            border-radius: 10px;
-            padding: 0 17px;
-            background: #15803d;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        button:disabled {
-            opacity: 0.6;
-            cursor: wait;
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #64748b;
-            font-size: 12px;
-        }
-
-        @media (max-width: 420px) {
-            .card {
-                padding: 12px;
-            }
-
-            header h1 {
-                font-size: 23px;
-            }
-
-            #send {
-                padding: 0 12px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agrolingo AI</title>
+<style>
+:root{color-scheme:dark;--bg:#07120f;--panel:#10221a;--line:#294436;--green:#22c55e;--muted:#a3b8aa}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:#f0fdf4;font:15px Arial,sans-serif}
+header{padding:16px;display:flex;justify-content:space-between;align-items:center;gap:12px;background:#0c1913;border-bottom:1px solid var(--line)}
+h1{font-size:22px;margin:0}h1 span{color:var(--green)}
+h2{font-size:19px;margin:0 0 8px}
+p,.muted{color:var(--muted);font-size:13px;line-height:1.5}
+select,input,textarea,button{font:inherit;border-radius:9px;padding:11px}
+input,textarea,select{width:100%;background:#07120f;color:white;border:1px solid var(--line)}
+button{background:#17442c;color:white;border:1px solid #326546;cursor:pointer}
+button:hover{background:#20613b}
+.layout{max-width:1100px;margin:auto;padding:14px;display:grid;grid-template-columns:190px 1fr;gap:14px}
+nav,.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+nav{display:flex;flex-direction:column;gap:8px}
+nav button{text-align:left}
+nav button.active,.primary{background:#15803d}
+main{min-width:0}
+.tab{display:none}.tab.active{display:block}
+.messages{height:50vh;min-height:280px;overflow:auto;display:flex;flex-direction:column;gap:10px;padding:12px 0}
+.msg{padding:12px;border-radius:12px;max-width:95%;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5}
+.ai{background:#1b3025;align-self:flex-start}.user{background:#17683b;align-self:flex-end}
+form{display:flex;gap:8px}form input{flex:1;min-width:0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.output{background:#081711;border:1px solid var(--line);border-radius:10px;padding:12px;min-height:120px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.status{font-size:13px;color:#86efac;margin-top:8px}
+img{max-width:100%;max-height:260px;object-fit:contain;margin:10px 0}
+label{display:block;margin:12px 0 6px}
+@media(max-width:650px){.layout{grid-template-columns:1fr;padding:8px}nav{display:grid;grid-template-columns:1fr 1fr}nav button{text-align:center;font-size:12px;padding:9px 4px}.grid{grid-template-columns:1fr}header{align-items:flex-start}h1{font-size:19px}.messages{height:48vh}}
+</style>
 </head>
-
 <body>
-    <header>
-        <h1>🌱 AgroLingo AI</h1>
-        <p>Your smart agricultural assistant for Ethiopian farming</p>
-    </header>
+<header>
+  <div>
+    <h1>🌱 Agrolingo <span>AI</span></h1>
+    <div class="muted">Your multilingual agricultural assistant</div>
+  </div>
+  <div style="width:145px">
+    <label for="language">Language</label>
+    <select id="language">
+      <option>English</option>
+      <option>Afaan Oromo</option>
+      <option>Amharic</option>
+      <option>Swahili</option>
+      <option>French</option>
+      <option>Spanish</option>
+      <option>Hindi</option>
+      <option>Portuguese</option>
+      <option>Vietnamese</option>
+    </select>
+  </div>
+</header>
 
-    <main>
-        <section class="card">
-            <div class="notice">
-                Ask questions about maize, crop diseases, pests, soil,
-                irrigation, fertilizers, and farming methods.
-            </div>
+<div class="layout">
+<nav>
+  <button class="active" data-tab="advisor">💬 AI Advisor</button>
+  <button data-tab="translator">🌐 Translator</button>
+  <button data-tab="doctor">🌿 Crop Doctor</button>
+  <button data-tab="market">☁ Market & Weather</button>
+  <p>AI advice is not a confirmed diagnosis. Verify important treatments with a local agricultural expert.</p>
+</nav>
 
-            <div id="chat" aria-live="polite">
-                <div class="message ai">
-                    <span class="label">AgroLingo AI</span>
-                    Welcome! 🌾 Describe your crop problem, and I'll help
-                    you investigate possible causes and practical next steps.
-                </div>
-            </div>
+<main>
+<section id="advisor" class="tab active">
+<div class="panel">
+  <h2>Agri Chat Advisor</h2>
+  <p>Ask about soil, crops, pests, irrigation, fertilizers, and farming.</p>
+  <div id="messages" class="messages">
+    <div class="msg ai">Welcome to Agrolingo AI. What farming question can I help you with?</div>
+  </div>
+  <form id="chatForm">
+    <input id="question" placeholder="Ask a farming question..." required>
+    <button class="primary">Send</button>
+  </form>
+  <div class="actions">
+    <button data-prompt="How can I manage tomato late blight safely?">Tomato disease</button>
+    <button data-prompt="Explain NPK 15-15-15 fertilizer.">NPK fertilizer</button>
+    <button data-prompt="What information is needed for a maize irrigation schedule?">Maize irrigation</button>
+  </div>
+  <div id="chatStatus" class="status"></div>
+</div>
+</section>
 
-            <h3>Try asking:</h3>
+<section id="translator" class="tab">
+<div class="panel">
+  <h2>Agricultural Translator</h2>
+  <p>Translate technical farming text into clear language.</p>
+  <div class="grid">
+    <div>
+      <label for="sourceText">Original text</label>
+      <textarea id="sourceText" rows="8" placeholder="Paste agricultural text here..."></textarea>
+    </div>
+    <div>
+      <label>Translated result</label>
+      <div id="translation" class="output">Your translation will appear here.</div>
+    </div>
+  </div>
+  <button id="translateBtn" class="primary" style="width:100%;margin-top:12px">Translate and simplify</button>
+  <div id="translateStatus" class="status"></div>
+</div>
+</section>
 
-            <div class="suggestions">
-                <button type="button"
-                    onclick="useSuggestion('Why are my maize leaves turning yellow?')">
-                    🌽 Yellow maize leaves
-                </button>
+<section id="doctor" class="tab">
+<div class="panel">
+  <h2>AI Crop Doctor</h2>
+  <p>Upload a clear crop photo and describe the symptoms.</p>
+  <label for="cropImage">Crop photo</label>
+  <input type="file" id="cropImage" accept="image/jpeg,image/png,image/webp">
+  <img id="preview" hidden alt="Crop preview">
+  <label for="notes">Symptoms and crop details</label>
+  <textarea id="notes" rows="3" placeholder="Crop type, location, symptoms, and weather..."></textarea>
+  <button id="diagnoseBtn" class="primary" style="width:100%;margin-top:12px">Analyze crop</button>
+  <div id="diagnoseStatus" class="status"></div>
+  <div id="diagnosis" class="output" style="margin-top:12px">The diagnosis will appear here.</div>
+</div>
+</section>
 
-                <button type="button"
-                    onclick="useSuggestion('How can I improve my soil fertility?')">
-                    🌱 Soil fertility
-                </button>
+<section id="market" class="tab">
+<div class="panel">
+  <h2>Market & Weather</h2>
+  <p>Live weather and commodity prices are not connected yet.</p>
+  <label for="location">Town or market</label>
+  <input id="location" placeholder="e.g. Ambo, Ethiopia">
+  <div class="output" style="margin-top:12px">
+    To show genuine weather forecasts and crop prices, connect a weather API and a reliable market data provider. This section does not display fabricated live readings.
+  </div>
+</div>
+</section>
+</main>
+</div>
 
-                <button type="button"
-                    onclick="useSuggestion('How should I water maize during a dry season?')">
-                    💧 Irrigation
-                </button>
-            </div>
+<script>
+const $ = id => document.getElementById(id);
 
-            <form id="form">
-                <textarea id="message"
-                    placeholder="Describe your farming question..."
-                    aria-label="Your farming question"
-                    required></textarea>
+document.querySelectorAll("[data-tab]").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll("[data-tab]").forEach(b =>
+      b.classList.toggle("active", b === button)
+    );
+    document.querySelectorAll(".tab").forEach(section =>
+      section.classList.toggle("active", section.id === button.dataset.tab)
+    );
+  });
+});
 
-                <button id="send" type="submit">Send ➤</button>
-            </form>
-        </section>
-    </main>
+async function apiPost(url, data) {
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(data)
+  });
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.error || "Request failed");
+  return result;
+}
 
-    <footer>
-        AgroLingo AI · AI-generated guidance may be imperfect.
-        Confirm serious crop problems with a local agricultural expert.
-    </footer>
+function addMessage(text, sender) {
+  const message = document.createElement("div");
+  message.className = "msg " + sender;
+  message.textContent = text;
+  $("messages").appendChild(message);
+  $("messages").scrollTop = $("messages").scrollHeight;
+  return message;
+}
 
-    <script>
-        const form = document.getElementById("form");
-        const input = document.getElementById("message");
-        const chat = document.getElementById("chat");
-        const send = document.getElementById("send");
+async function askAI(question) {
+  addMessage(question, "user");
+  const loading = addMessage("Agrolingo AI is thinking...", "ai");
+  try {
+    const result = await apiPost("/api/chat", {
+      message: question,
+      language: $("language").value
+    });
+    loading.textContent = result.text;
+  } catch (error) {
+    loading.textContent = "Error: " + error.message;
+  }
+}
 
-        function addMessage(text, sender) {
-            const box = document.createElement("div");
-            box.className = "message " + sender;
+$("chatForm").addEventListener("submit", event => {
+  event.preventDefault();
+  const question = $("question").value.trim();
+  if (!question) return;
+  $("question").value = "";
+  askAI(question);
+});
 
-            const label = document.createElement("span");
-            label.className = "label";
-            label.textContent =
-                sender === "user" ? "You" : "AgroLingo AI";
+document.querySelectorAll("[data-prompt]").forEach(button => {
+  button.addEventListener("click", () => askAI(button.dataset.prompt));
+});
 
-            const content = document.createElement("div");
-            content.textContent = text;
+$("translateBtn").addEventListener("click", async () => {
+  const text = $("sourceText").value.trim();
+  if (!text) {
+    $("translation").textContent = "Enter text first.";
+    return;
+  }
+  $("translation").textContent = "Translating...";
+  try {
+    const result = await apiPost("/api/translate", {
+      text,
+      language: $("language").value
+    });
+    $("translation").textContent = result.text;
+  } catch (error) {
+    $("translation").textContent = "Error: " + error.message;
+  }
+});
 
-            box.appendChild(label);
-            box.appendChild(content);
-            chat.appendChild(box);
-            chat.scrollTop = chat.scrollHeight;
+let imageData = null;
+let imageMime = "image/jpeg";
 
-            return box;
-        }
+$("cropImage").addEventListener("change", () => {
+  const file = $("cropImage").files[0];
+  imageData = null;
+  if (!file) return;
 
-        function useSuggestion(text) {
-            input.value = text;
-            input.focus();
-        }
+  if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+    alert("Choose a JPG, PNG, or WEBP image.");
+    $("cropImage").value = "";
+    return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    alert("Choose an image smaller than 5 MB.");
+    $("cropImage").value = "";
+    return;
+  }
 
-        form.addEventListener("submit", async function(event) {
-            event.preventDefault();
+  imageMime = file.type;
+  const reader = new FileReader();
+  reader.onload = () => {
+    $("preview").src = reader.result;
+    $("preview").hidden = false;
+    imageData = reader.result.split(",")[1];
+  };
+  reader.readAsDataURL(file);
+});
 
-            const message = input.value.trim();
+$("diagnoseBtn").addEventListener("click", async () => {
+  const notes = $("notes").value.trim();
+  if (!notes && !imageData) {
+    $("diagnosis").textContent = "Upload a photo or describe symptoms.";
+    return;
+  }
 
-            if (!message || send.disabled) return;
+  $("diagnosis").textContent = "Analyzing crop...";
+  try {
+    const result = await apiPost("/api/diagnose", {
+      notes,
+      image: imageData,
+      mimeType: imageMime,
+      language: $("language").value
+    });
+    $("diagnosis").textContent = result.text;
+  } catch (error) {
+    $("diagnosis").textContent = "Error: " + error.message;
+  }
+});
 
-            addMessage(message, "user");
-            input.value = "";
-            send.disabled = true;
-            send.textContent = "...";
-
-            const loading = addMessage("Thinking...", "ai");
-
-            try {
-                const response = await fetch("/chat", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ message })
-                });
-
-                const data = await response.json();
-                loading.lastElementChild.textContent =
-                    data.reply || "No response was returned.";
-
-                if (!response.ok) {
-                    console.error("AI request failed:", response.status);
-                }
-            } catch (error) {
-                loading.lastElementChild.textContent =
-                    "Connection failed. Check your internet connection and try again.";
-            } finally {
-                send.disabled = false;
-                send.textContent = "Send ➤";
-                input.focus();
-            }
-        });
-    </script>
+fetch("/api/health")
+  .then(response => response.json())
+  .then(data => console.log("Agrolingo backend ready:", data))
+  .catch(() => console.log("Backend health check failed"));
+</script>
 </body>
-  </html>
+</html>
